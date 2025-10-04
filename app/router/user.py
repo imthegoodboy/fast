@@ -29,6 +29,8 @@ def signup(user:schema.usercreate,dmb: session=Depends(get_db)):
     dmb.refresh(new_user)
     return  new_user
 
+
+
 @router.post("/login")
 def login(user:schema.UserLogin,dmb: session=Depends(get_db)):
     # Find user by email
