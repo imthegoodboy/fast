@@ -30,19 +30,8 @@ def signup(user:schema.usercreate,dmb: session=Depends(get_db)):
     return  new_user
 
 
+ 
 
-@router.post("/login")
-def login(user:schema.UserLogin,dmb: session=Depends(get_db)):
-    # Find user by email
-    db_user = dmb.query(model.Users).filter(model.Users.email == user.email).first()
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    # Verify password
-    if not utills.verify_password(user.password, db_user.password):
-        raise HTTPException(status_code=401, detail="Invalid password")
-    
-    return {"message": "Login successful", "user_id": db_user.id}
   
 
 
@@ -54,3 +43,7 @@ def user_details(id:int,dmb: session=Depends(get_db)):
     user = dmb.query(model.Users).filter(model.Users.id == id).first()
  
     return user
+
+
+
+    

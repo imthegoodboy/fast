@@ -13,7 +13,7 @@ from .database import engine,  get_db
 from random import randrange
 from . import schema , utills
 from passlib.context import CryptContext
-from .router import product,user 
+from .router import product,user ,auth
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
@@ -39,9 +39,9 @@ while True:
 
     # my_name=[{"name":"nikku","housenumber":123},{"name":"hikku","housenumber":123}]
 
-    # @app.get("/nikku")
-    # def hello():
-    #     return  my_name 
+    @app.get("/nikku")
+    def hello():
+        return  {"message":"Hello World"}
 
 
     # @app.post("/")
@@ -51,4 +51,5 @@ while True:
 
 app.include_router(product.router)
 app.include_router(user.router)
+app.include_router(auth.router)
  
