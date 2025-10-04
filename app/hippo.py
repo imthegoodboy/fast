@@ -13,7 +13,7 @@ from .database import engine,  get_db
 from random import randrange
 from . import schema , utills
 from passlib.context import CryptContext
-from .router import product,user,auth
+from .router import product,user 
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
@@ -51,4 +51,4 @@ while True:
 
 app.include_router(product.router)
 app.include_router(user.router)
-app.include_router(auth.router)
+ 

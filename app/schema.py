@@ -23,21 +23,26 @@ class productCreate(productBase):
 
 
 
-
+# for getting the product(response model)
 class Product(BaseModel):
  
     name:str
-    price:int
-
+ 
     class config:
         orm_mode = True
 
+
+
+
+#for USERS
 
 class usercreate(BaseModel):
     name:str
     email:EmailStr
     password:str
 
+
+#response for the user 
 class UserOut(BaseModel):
     id:int
     name:str

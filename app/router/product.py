@@ -2,8 +2,7 @@ from .. import schema,model,utills
 from fastapi import APIRouter,Depends,HTTPException,APIRouter
 from sqlalchemy.orm import session
 from ..database import get_db
-from sqlalchemy.orm import Session
-from passlib.context import CryptContext
+ 
 
 router=APIRouter(
     prefix="/product",
@@ -47,7 +46,7 @@ def delete_product(id:int,dmb: session=Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     deleted_product.delete(synchronize_session=False)
     dmb.commit()
-    return {"message": deleted_product}
+    return {"message": f"product is {deleted_product} deleted successfully"}
 
     
 # for finding the individual product
@@ -57,14 +56,11 @@ def find_product(id:int,dmb: session=Depends(get_db)):
     # product=cursor.fetchone()
    
     product = dmb.query(model.Products).filter(model.Products.id == id).first()
-
-    print(product)
     return   product 
 
 
 #for updating the product
 @router.put("/{id}")
-
 def update_product(id:int, product:schema.productCreate,dmb: session=Depends(get_db)):
     # cursor.execute(""" UPDATE public."Products" SET name = %s, price = %s, inventory = %s WHERE id = %s RETURNING * """,(product.name, product.price, product.inventory, id))
     # updated_product=cursor.fetchone()
