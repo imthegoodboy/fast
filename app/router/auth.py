@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,HTTPException,APIRouter
-
-from .. import schema,model,utills
+ 
+from .. import schema,model,utills, outh2
 from sqlalchemy.orm import session
 from ..database import get_db
 
@@ -20,5 +20,5 @@ def login_user(user_credentials:schema.userlogin_credentials,dmb: session=Depend
     
     if not utills.verify_password(user_credentials.password, user.password):
         raise HTTPException(status_code=404, detail="Invalid password")
-    
-    return {"message": "Login successful"}
+    access_token=outh2.create_access_token(data={"user_id":user.id})
+    return {"message": "token type:Bearer","access_token":access_token}

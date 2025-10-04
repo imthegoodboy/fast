@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 class productBase(BaseModel):
     name:str
@@ -63,3 +64,13 @@ class UserLogin(BaseModel):
 class userlogin_credentials(BaseModel):
     email:EmailStr
     password:str
+
+
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    id: Optional[str] = None
