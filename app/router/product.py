@@ -2,7 +2,7 @@ from .. import schema,model,utills
 from fastapi import APIRouter,Depends,HTTPException,APIRouter
 from sqlalchemy.orm import session
 from ..database import get_db
- 
+from .. import outh2
 
 router=APIRouter(
     prefix="/product",
@@ -22,9 +22,10 @@ def get_products(dmb: session=Depends(get_db)):
 
 # for create product
 @router.post("/",response_model=schema.Product)
-def create_product(product:schema.productCreate,dmb: session=Depends(get_db)):
+def create_product(product:schema.productCreate,dmb: session=Depends(get_db),current_user:schema.TokenData=Depends(outh2.get_current_user)):
     # cursor.execute(""" INSERT INTO public."Products" (name, price, inventory) VALUES (%s, %s, %s) RETURNING * """,(product.name, product.price, product.inventory))
     # new_product=cursor.fetchone()
+    print(current_user)
     # new_product = model.Products(name=product.name, price=product.price, inventory=product.inventory)
     new_product = model.Products(**product.model_dump())
     dmb.add(new_product)
@@ -37,7 +38,7 @@ def create_product(product:schema.productCreate,dmb: session=Depends(get_db)):
 
 # for delete product
 @router.delete("/{id}")
-def delete_product(id:int,dmb: session=Depends(get_db)):
+def delete_product(id:int,dmb: session=Depends(get_db),current_user:schema.TokenData=Depends(outh2.get_current_user)):
     # cursor.execute(""" DELETE FROM public."Products" WHERE id = %s RETURNING * """,(id,))
     # deleted_product=cursor.fetchone()
     # conn.commit()
@@ -61,7 +62,7 @@ def find_product(id:int,dmb: session=Depends(get_db)):
 
 #for updating the product
 @router.put("/{id}")
-def update_product(id:int, product:schema.productCreate,dmb: session=Depends(get_db)):
+def update_product(id:int, product:schema.productCreate,dmb: session=Depends(get_db),current_user:schema.TokenData=Depends(outh2.get_current_user)):
     # cursor.execute(""" UPDATE public."Products" SET name = %s, price = %s, inventory = %s WHERE id = %s RETURNING * """,(product.name, product.price, product.inventory, id))
     # updated_product=cursor.fetchone()
     # print(updated_product)
@@ -71,7 +72,7 @@ def update_product(id:int, product:schema.productCreate,dmb: session=Depends(get
     if producct is None:
         raise HTTPException(status_code=404, detail="Product not found")
     
-    updated_querry.update(product.dict(),synchronize_session=False)
+    updated_querry.update(product.model_dump(),synchronize_session=False)
     dmb.commit()
     dmb.refresh(producct)
     return {"message":"Product updated successfully"}

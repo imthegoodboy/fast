@@ -21,4 +21,4 @@ def login_user(user_credentials:schema.userlogin_credentials,dmb: session=Depend
     if not utills.verify_password(user_credentials.password, user.password):
         raise HTTPException(status_code=404, detail="Invalid password")
     access_token=outh2.create_access_token(data={"user_id":user.id})
-    return {"message": "token type:Bearer","access_token":access_token}
+    return {"access_token": access_token, "token_type": "bearer"}
